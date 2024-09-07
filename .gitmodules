@@ -1,0 +1,3 @@
+[submodule "modules/dbow3"]
+	path = modules/dbow3
+	url = https://github.com/teju81/DBow3.git
