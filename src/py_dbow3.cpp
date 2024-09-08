@@ -42,7 +42,7 @@ public:
 		vocabulary->save(path, binary_compressed);
 	}
 
-	DBoW3::BowVector transform(const std::vector<cv::Mat> &features)
+	py::dict transform(const std::vector<cv::Mat> &features)
 	{
 		DBoW3::BowVector word;
 		vocabulary->transform(features, word);
