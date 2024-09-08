@@ -46,7 +46,12 @@ public:
 	{
 		DBoW3::BowVector word;
 		vocabulary->transform(features, word);
-		return word;
+		
+		py::dict bow_vector_dict;
+        	for (const auto& item : word) {
+			bow_vector_dict[py::int_(item.first)] = py::float_(item.second);  // Convert BowVector to a Python dict
+		}
+		return bow_vector_dict;
 	}
 
 	double score(const DBoW3::BowVector &A, const DBoW3::BowVector &B)
