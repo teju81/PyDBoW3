@@ -47,8 +47,9 @@ public:
 		DBoW3::BowVector word;
 		vocabulary->transform(features, word);
 		
-		return word;
+		return fromBowVector(word);
 	}
+
     	// Convert std::map<int, double> to DBoW3::BowVector
     	DBoW3::BowVector toBowVector(const std::map<int, double> &input_map) 
 	{
@@ -59,10 +60,20 @@ public:
         	return bow_vector;
     	}
 
+    	// Convert DBoW3::BowVector to std::map<int, double> (for returning to Python as dict)
+    	std::map<int, double> fromBowVector(const DBoW3::BowVector &bow_vector) 
+	{
+        	std::map<int, double> result_map;
+        	for (const auto &item : bow_vector) {
+            		result_map[item.first] = item.second;  // Manually convert BowVector to map
+        	}
+        	return result_map;
+    	}
+
 	double score(const std::map<int, double> &A, const std::map<int, double> &B)
 	{
-		DBoW3::BowVector bow_A(A.begin(), A.end());  // Convert Python dict to DBoW3::BowVector
-		DBoW3::BowVector bow_B(B.begin(), B.end());
+		DBoW3::BowVector bow_A = toBowVector(A);  // Convert Python dict to DBoW3::BowVector
+		DBoW3::BowVector bow_B = toBowVector(B);
 		
 		return vocabulary->score(bow_A, bow_B);
 	}
