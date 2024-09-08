@@ -42,21 +42,20 @@ public:
 		vocabulary->save(path, binary_compressed);
 	}
 
-	py::dict transform(const std::vector<cv::Mat> &features)
+	std::map<int, double> transform(const std::vector<cv::Mat> &features)
 	{
 		DBoW3::BowVector word;
 		vocabulary->transform(features, word);
 		
-		py::dict bow_vector_dict;
-        	for (const auto& item : word) {
-			bow_vector_dict[py::int_(item.first)] = py::float_(item.second);  // Convert BowVector to a Python dict
-		}
-		return bow_vector_dict;
+		return word;
 	}
 
-	double score(const DBoW3::BowVector &A, const DBoW3::BowVector &B)
+	double score(const std::map<int, double> &A, const std::map<int, double> &B)
 	{
-		return vocabulary->score(A, B);
+		DBoW3::BowVector bow_A(A.begin(), A.end());  // Convert Python dict to DBoW3::BowVector
+		DBoW3::BowVector bow_B(B.begin(), B.end());
+		
+		return vocabulary->score(bow_A, bow_B);
 	}
 
 	DBoW3::Vocabulary *vocabulary;
