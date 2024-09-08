@@ -49,6 +49,15 @@ public:
 		
 		return word;
 	}
+    	// Convert std::map<int, double> to DBoW3::BowVector
+    	DBoW3::BowVector toBowVector(const std::map<int, double> &input_map) 
+	{
+        	DBoW3::BowVector bow_vector;
+        	for (const auto &item : input_map) {
+            		bow_vector[item.first] = item.second;  // Manually insert into BowVector
+        	}
+        	return bow_vector;
+    	}
 
 	double score(const std::map<int, double> &A, const std::map<int, double> &B)
 	{
